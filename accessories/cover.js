@@ -193,7 +193,7 @@ class HomeAssistantHorizontalBlind extends HomeAssistantRollershutter {
       tilt_position: position,
     };
 
-    this.log(`Setting the state of the ${this.name} to ${payload.position}`);
+    this.log(`Setting the state of the ${this.name} to ${payload.tilt_position}`);
 
     this.client.callService(this.domain, 'set_cover_tilt_position', payload, (data) => {
       if (data) {
