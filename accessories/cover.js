@@ -139,7 +139,7 @@ class HomeAssistantRollershutter extends HomeAssistantCover {
   }
 
   transformData(data) {
-    return (data && data.attributes) ? data.attributes.current_position : null;
+    return (data && data.attributes && data.state !== 'unavailable') ? data.attributes.current_position : null;
   }
 
   setTargetState(position, callback, context) {
