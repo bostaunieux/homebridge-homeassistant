@@ -165,6 +165,46 @@ class HomeAssistantRollershutter extends HomeAssistantCover {
   }
 }
 
+class HomeAssistantHorizontalBlinds extends HomeAssistantRollershutter {
+  constructor(log, data, client, firmware) {
+    super(log, data, client, firmware);
+    if (data.attributes && data.attributes.homebridge_model) {
+      this.model = String(data.attributes.homebridge_model);
+    } else {
+      this.model = 'Horizontal Blinds';
+    }
+    this.service = new Service.WindowCovering();
+    this.stateCharacteristic = Characteristic.CurrentHorizontalTiltAngle;
+    this.targetCharacteristic = Characteristic.TargetHorizontalTiltAngle;
+  }
+
+  transformData(data) {
+    return (data && data.attributes && data.state !== 'unavailable') ? data.attributes.current_tilt_position : null;
+  }
+
+  setTargetState(position, callback, context) {
+    if (context === 'internal') {
+      callback();
+      return;
+    }
+
+    const payload = {
+      entity_id: this.entity_id,
+      tilt_position: position,
+    };
+
+    this.log(`Setting the state of the ${this.name} to ${payload.position}`);
+
+    this.client.callService(this.domain, 'set_cover_tilt_position', payload, (data) => {
+      if (data) {
+        callback();
+      } else {
+        callback(communicationError);
+      }
+    });
+  }
+}
+
 class HomeAssistantRollershutterBinary extends HomeAssistantRollershutter {
   transformData(data) {
     return (data && data.state && data.state !== 'unavailable') ? ((data.state === 'open') * 100) : null;
@@ -192,6 +232,8 @@ function HomeAssistantCoverFactory(log, data, client, firmware) {
 
   if (data.attributes.homebridge_cover_type === 'garage_door') {
     return new HomeAssistantGarageDoor(log, data, client, firmware);
+  } else if (data.attributes.homebridge_cover_type === 'horizontal_blinds') {
+    return new HomeAssistantHorizontalBlinds(log, data, client, firmware);
   } else if (data.attributes.homebridge_cover_type === 'rollershutter') {
     if (data.attributes.current_position !== undefined) {
       return new HomeAssistantRollershutter(log, data, client, firmware);
