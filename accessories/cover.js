@@ -174,8 +174,10 @@ class HomeAssistantHorizontalBlinds extends HomeAssistantRollershutter {
       this.model = 'Horizontal Blinds';
     }
     this.service = new Service.WindowCovering();
-    this.stateCharacteristic = Characteristic.CurrentHorizontalTiltAngle;
-    this.targetCharacteristic = Characteristic.TargetHorizontalTiltAngle;
+    this.stateCharacteristic = Characteristic.CurrentPosition;
+    this.targetCharacteristic = Characteristic.TargetPosition;
+    // this.stateCharacteristic = Characteristic.CurrentHorizontalTiltAngle;
+    // this.targetCharacteristic = Characteristic.TargetHorizontalTiltAngle;
   }
 
   transformData(data) {
