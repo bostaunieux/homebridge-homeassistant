@@ -53,7 +53,9 @@ For binary sensors with the `opening` `device_class` you can also set `homebridg
 
 Covers on your Home Assistant will appear as a garage door by default. In order
 to do change this you may specify its type in the `customize` section of your
-Home Assistant's `configuration.yaml`. Refer to the following example:
+Home Assistant's `configuration.yaml`. Rollershutter allows for either on/off control
+or setting target shutter position. Horizontal blind allows setting the blind tilt angle.
+Refer to the following example:
 
 ```
 customize:
@@ -61,6 +63,8 @@ customize:
     homebridge_cover_type: rollershutter
   cover.garage:
     homebridge_cover_type: garage_door
+  cover.bedroom_blind:
+    homebridge_cover_type: horizontal_blind
 ```
 
 ### Device Tracker
