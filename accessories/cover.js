@@ -165,19 +165,17 @@ class HomeAssistantRollershutter extends HomeAssistantCover {
   }
 }
 
-class HomeAssistantHorizontalBlinds extends HomeAssistantRollershutter {
+class HomeAssistantHorizontalBlind extends HomeAssistantRollershutter {
   constructor(log, data, client, firmware) {
     super(log, data, client, firmware);
     if (data.attributes && data.attributes.homebridge_model) {
       this.model = String(data.attributes.homebridge_model);
     } else {
-      this.model = 'Horizontal Blinds';
+      this.model = 'Horizontal Blind';
     }
     this.service = new Service.WindowCovering();
     this.stateCharacteristic = Characteristic.CurrentPosition;
     this.targetCharacteristic = Characteristic.TargetPosition;
-    // this.stateCharacteristic = Characteristic.CurrentHorizontalTiltAngle;
-    // this.targetCharacteristic = Characteristic.TargetHorizontalTiltAngle;
   }
 
   transformData(data) {
@@ -234,8 +232,8 @@ function HomeAssistantCoverFactory(log, data, client, firmware) {
 
   if (data.attributes.homebridge_cover_type === 'garage_door') {
     return new HomeAssistantGarageDoor(log, data, client, firmware);
-  } else if (data.attributes.homebridge_cover_type === 'horizontal_blinds') {
-    return new HomeAssistantHorizontalBlinds(log, data, client, firmware);
+  } else if (data.attributes.homebridge_cover_type === 'horizontal_blind') {
+    return new HomeAssistantHorizontalBlind(log, data, client, firmware);
   } else if (data.attributes.homebridge_cover_type === 'rollershutter') {
     if (data.attributes.current_position !== undefined) {
       return new HomeAssistantRollershutter(log, data, client, firmware);
